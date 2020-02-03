@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 import pandas as pd
 import numpy as np
 
-# this file is specific to the laptop of Abraham.
 # If you want to run the main.py you have to get a local database like MySQL. You can partly re-use this code
 def dataSQL():
     SQLALCHEMY_DATABASE_URI = create_engine('mysql+pymysql://root:XXXXXXXX*O@localhost/pureballast')
