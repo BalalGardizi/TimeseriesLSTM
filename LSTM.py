@@ -51,7 +51,8 @@ def Create_new_added(dataframe,code2,code3,code4,code5,interval): #Alarm type_co
     dataset_initial = d.values
 
     DataUV_week37_max=add_feature(added_feature,code3,interval)
-    Data_on_of=add_feature_indicate_on(added_featured,code3,interval) #on or off?
+    Data_on_of=add_feature_indicate_on(added_featured,code3,interval) #on or off? #I could make a class function to switch between feature, this is a low level solution 
+    
 
     Data_discharge=add_feature_w(added_feature,code4,interval) #charge
     Data_charge=add_feature_w(added_feature,code5,interval)#discharge
@@ -150,7 +151,7 @@ def LSTM(code2,code3,code4,code5,work,interval):
     scaler,train,test,scaler_d,scaler_m=scale(dataset)
     #scaling making sure scalers for test and training sets are set correctly
 
-    # reshape into X=t and Y=t+1
+    # reshape into X=t and Y=t+1, so I am looking technically 1 week ahead
     look_back = 1
     trainX, trainY = create_dataset(train, look_back)
     testX, testY = create_dataset(test, look_back)
@@ -164,10 +165,10 @@ def LSTM(code2,code3,code4,code5,work,interval):
 
     model.add(Dense(1))
     model.add(Dropout(0.001))
-    #future optimization maybe do grid search? new
+    #TODO; future optimization maybe do grid search, usecase is limited, this is for proof of concept, minimum dataset]
 #    keras.optimizers.Nadam(lr=0.002, beta_1=0.9, beta_2=0.999, epsilon=None, schedule_decay=0.004)
 
-    model.compile(loss='mean_squared_error', optimizer='Adam')
+    model.compile(loss='mean_squared_error', optimizer='Adam') 
     model.fit(trainX, trainY, epochs=50, batch_size=3, verbose=1)
     # make prediction
     trainPredict = model.predict(trainX)
@@ -230,7 +231,7 @@ def LSTM(code2,code3,code4,code5,work,interval):
 
             "layout": go.Layout(
                 xaxis=dict(title='date'),
-                yaxis=dict(title='# of times alarms 13'),
+                yaxis=dict(title='# of times alarms 13'), #example time, feature 13, or for prediction of C:640 UV break, sensor alarm. 
                 title='LSTM prediction Alarms/Warnings'
             ),
         }
